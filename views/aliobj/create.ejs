@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>获得页面详情</title>
+    <link rel='stylesheet' href='/layui/css/layui.css' />
+  </head>
+  <body>
+    <script src="/layui/layui.js"></script>
+		
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+			<legend>输入页面提取详情</legend>
+		</fieldset>
+		<div id="pbody"></div> 
+		<!-- 
+		<iframe class="layui-row" src="https://detail.1688.com/offer/582972532882.html?spm=b26110380.sw1688.mof001.80.54708d88o5w2Ek&tracelog=p4p&clickid=751d04fc39f141ffa8bc9cadd45f0108&sessionid=512694103dbb5f6c828f738be45b5386"
+		 id="frameWork" frameborder="0" height="500px" width="99%" style="padding: 10px;"></iframe> -->
+		<div class="layui-form-item">
+			<!-- <label class="layui-form-label">请输入网址</label> -->
+			<div class="layui-input-block">
+				<!-- <input type="text" id="urladd" lay-verify="urladd" autocomplete="off" placeholder="请输入网址" class="layui-input"> -->
+				<textarea placeholder="请输入内容" id="los" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<!-- <input type="button" value="前往网页" id="gourl" class="layui-btn" /> -->
+		<input type="button" value="获取内容" id="gethtml" class="layui-btn" />
+		<input type="button" value="导出表格" id="toexcel" class="layui-btn" />
+		<form action="/aliobj/save" method="post">
+       
+              <textarea name="list" id="list" class="layui-textarea"></textarea>
+           
+			  <input type="submit" value="保存内容到数据库"  class="layui-btn" />
+            </tr>
+          </tbody>
+        </table>
+      </form>
+		</div>
+		<script src="js/Singleexport2excel.js"></script>
+		<script>
+			var excels = [];
+			
+			layui.use('jquery', function() {
+				var $ = layui.jquery;
+				//var excels = [];
+				
+				
+				$("#gethtml").click(function() {
+
+					var str = $("#los").val();
+					var picE = /(?<=data-lazy-src=")(.+?)\.jpg/gi;
+					var picarr = str.match(picE); //21个相片
+
+					var nameE = /(?<=alt=")(.+?)(?=")/gi;
+					var namearr = str.match(nameE);
+
+					var priceE = /(?<=class="value">)(.+?)(?=<\/em><em class="price-unit")/gi;
+					var pricearr = str.match(priceE);
+
+					var unitE = /(?<=<em class="price-unit">)(.+?)(?=<\/em><\/span>)/gi;
+					var unitarr = str.match(unitE);
+
+					var enbleE = /(?<=class="value">)(.+?)(?=<\/em><em class="unit")/gi;
+					var enblearr = str.match(enbleE);
+					excels = [];
+					for (var i = 0; i < picarr.length; i++) {
+						excels.push({
+							pic: picarr[i].replace(/\.32(.+?)32/, ""),
+							name: namearr[i],
+							pri: pricearr[i],
+							unit: unitarr[i],
+							enbleno: enblearr[i]
+						})
+					}
+                    $("#list").val( JSON.stringify(excels));
+				})
+				$("#toexcel").click(function() {
+					export2Excel(['照片', '名称', '单价', '币别', '剩余数量'], excels, '测试1');
+				})
+			})
+		</script>
+  </body>
+</html>

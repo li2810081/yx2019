@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>提取网页数据</title>
+    <link rel='stylesheet' href='/layui/css/layui.css'/>
+  </head>
+  <body>
+    <div  style="padding:10px"> 
+        <table class="layui-table">
+          <tbody>           
+            <tr>
+			
+              <td>输入网址</td>
+              <td><input type="input" class="layui-input" id="address"></input></td>
+            </tr> 
+            	
+             <!-- <tr> -->
+              <!-- <td>数据</td> -->
+              <!-- <td><textarea style="height:100px;" id="sdata" class="layui-input" value=""></textarea></td> -->
+            <!-- </tr>			 -->
+          </tbody>
+		  
+        </table>
+	    <input type="button" class="layui-btn layui-btn-normal layui-btn-radius"  value="提取数据"  />
+		<input type="button" class="layui-btn layui-btn-warm layui-btn-radius" value="保存数据" />  
+		
+    </div>
+	
+	<div style="padding:10px" id="dtshow" > 
+        <table class="layui-table" >
+          <tbody>           
+            <tr>			
+              <td>店铺网址</td>
+              <td colspan="3" v-html="Shop.urlshop"> </td>
+            </tr> 
+            	
+            <tr>
+              <td>店铺名称</td>
+              <td colspan="2" v-html="Shop.name"> </td>
+			  <td> <a class="layui-a" target="_blank" :href="Shop.wangwang">打开旺旺</a> </td>
+            </tr>	
+             <tr>
+			 <td>经销方式</td>
+               <td v-html="Shop.isfactory"></td>
+			   <td>所在地</td>
+              <td v-html="Shop.address"></td>			  
+            </tr>            			
+          </tbody>		  
+        </table>
+		<div class="layui-row">
+		    <div class="layui-col-xs3">
+			   <img :src="Product.mainpic" style="width:280px;height:240px"/>
+			</div>
+			<div class="layui-col-xs9">
+			   <table class="layui-table" >
+                       
+               <tr>			
+              <td>产品ID</td>
+              <td colspan="2" v-html="Product.p_id"> </td>
+               </tr> 
+			    <tr>			
+              <td>产品名称</td>
+              <td colspan="2" v-html="Product.title"> </td>
+               </tr> 
+			    <tr>			
+              <td>主价格</td>
+              <td v-html="Product.price"> </td>
+               </tr> 
+			    <tr>
+             <td>其他</td>				
+              <td><a class="layui-a" target="_blank" :href="'https://s.1688.com/collaboration/collaboration_search.htm?fromOfferId='+Product.p_id+'&tab=similarDesign&showStyle=shopwindow&topP4p=true&p4pSource=main#topoffer'">找相似</a> </td>
+              <td><a class="layui-a" target="_blank" :href="'https://s.1688.com/collaboration/collaboration_search.htm?fromOfferId='+Product.p_id+'&tab=sameDesign&showStyle=img&uniqfield=userid&sortType=booked&descendOrder=true&filt=y&topP4p=true&p4pSource=main&autoSimilarTab=true#topoffer'">找同款</a>  </td>
+               </tr> 
+			    <tr>			
+              <td>其他</td>
+              <td colspan="2" v-html="Product.description"> </td>
+               </tr> 
+            </table>
+			</div>
+		</div>
+		<table class="layui-table" v-html="Product.outdetail"></table>
+		<table class="layui-table" v-html="Product.moredetail"></table>
+		<table class="layui-table" v-html="Product.list"></table>
+	</div>	
+	
+	    <script src="/layui/layui.js"></script>
+		<script src="/js/vue.js"></script>
+		<script>
+		  
+		  var vm = new Vue({
+		  		el: "#dtshow",
+		  		data: {
+		  			Shop: {},
+		  			Product: {}
+		  		}
+		  	})
+		  	layui.use(['jquery', 'layer'], function () {
+		  		var $ = layui.jquery,
+		  		layer = layui.layer;
+
+		  		$(".layui-btn-normal").click(function () {
+		  			var index = layer.load(3);
+		  			$.ajax({
+		  				url: "/main/create",
+		  				type: 'Post',
+		  				data: {
+		  					url: $("#address").val()
+		  				},
+		  				dataType: "json",
+		  				success: function (dt) {
+		  					vm.Shop = dt.Shop;
+		  					vm.Product = dt.Product;
+		  					layer.close(index);
+		  				}
+		  			});
+
+		  		});
+
+		  		$(".layui-btn-warm").click(function () {
+		  			var index = layer.load(3);
+		  			$.ajax({
+		  				url: "/main/save",
+		  				type: 'Post',
+		  				data: {
+		  					shop:JSON.stringify(vm.Shop),
+		  					product:JSON.stringify(vm.Product)
+		  				},
+		  				dataType: "json",
+		  				success: function (dt) {
+		  					console.log(dt);
+		  					layer.close(index);
+							layer.msg(dt.p.msg+"<br/>"+dt.s.msg);
+		  				}
+		  			});
+
+		  		})
+		  	});
+		</script>
+  </body>
+</html>
