@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>提取到的网页数据</title>
+    <link rel='stylesheet' href='/layui/css/layui.css'/>
+  </head>
+  <body>
+    <div style="padding:10px"> 
+        <table class="layui-table">
+          <tbody>           
+            <tr>			
+              <td><%=product%></td>
+              <td colspan="3"><input type="input" class="layui-input" id="urlshop"><%=data.Shop.urlshop%></input></td>
+            </tr> 
+            	
+            <tr>
+              <td>店铺名称</td>
+              <td colspan="2"><input type="input" class="layui-input" id="name"><%=data.Shop.name%></input></td>
+			  <td><input type="input" class="layui-input" id="wangwang"><%=data.Shop.wangwang%></input></td>
+            </tr>	
+             <tr>
+			 <td>经销方式</td>
+               <td><input type="input" class="layui-input" id="isfactory"><%=data.Shop.isfactory%></input></td>
+			   <td>所在地</td>
+              <td><input type="input" class="layui-input" id="address"><%=data.Shop.address%></input></td>
+			  
+            </tr>	
+			
+          </tbody>
+		  
+        </table>
+	    <input type="button" class="layui-btn layui-btn-normal layui-btn-radius" value="提取数据"  />
+		<input type="button" class="layui-btn layui-btn-warm layui-btn-radius" value="保存数据" />      
+    </div>
+	    <script src="/layui/layui.js"></script>
+		<script>
+		  layui.use(['jquery','layer'],function(){
+		    var $=layui.jquery
+			,layer=layui.layer;
+			
+			$(".layui-btn-normal").click(function(){
+			  var index =layer.load(3);
+			  $.ajax({ url: "/create", 
+			           type:'Post',
+					   
+			           data:{url:$("#address").val()},
+					   dataType:"json",
+					   success: function(data){
+                          $("#data").html(data.Shop.name);
+						  layer.close(index);
+                       }
+			  });
+			
+			});
+			
+			$(".layui-btn-warm").click(function(){
+			
+			  
+			})
+		  });
+		</script>
+  </body>
+</html>

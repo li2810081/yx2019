@@ -1,0 +1,33 @@
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>后台管理</title> 
+  <meta name="renderer" content="webkit" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" /> 
+  <link rel="stylesheet" href="../layui/css/layui.css" media="all" /> 
+  <link rel="stylesheet" href="../style/admin.css" media="all" /> 
+ </head> 
+ <body class="layui-layout-body" layadmin-themealias="default"> 
+  <ul class="layui-nav"> 
+     <% for(var i=0; i<nav.length;i++) { %>
+         <li class="layui-nav-item"><a a-filter="<%=nav[i].src%>" href="javascript:void(0);"><%=nav[i].name%></a></li> 
+     <% } %>
+  </ul>
+     <a href="/logout" class="layui-nav-item" style="position:absolute;top:20px;right:50px;color:#fff">退出登录</a>
+  <iframe frameborder="0"  id="main" src="/main/" width="99%" height="100%"></iframe>
+  <script src="../layui/layui.js"></script> 
+  <script>
+  layui.use('element',function(){
+      var element = layui.element
+	  ,$=layui.jquery;
+	  
+	  $(".layui-nav-item a").click(function(){
+	     console.log($(this).attr("a-filter"))
+		 $("#main").attr("src", $(this).attr("a-filter"));
+	  })
+  });
+  //$("#main").attr("src", subhref);
+  </script>  
+ </body>
+</html>
