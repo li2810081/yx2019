@@ -6,11 +6,11 @@ var logger = require('morgan');
 var session = require('express-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var employees = require('./routes/employees');
-
+var User = require('./models/user');
 var mainrouter = require('./routes/main');
 var fstrouter = require('./routes/fst');
-
+var aesp = require('./lib/aesp');
+var orderRouter = require('./routes/order');
 var app = express();
 
 //connect to MongoDb
@@ -76,25 +76,56 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.get('/login', function(req, res) {
+	// 	var test = new User({
+	// 		username: "yangxu2019",
+	// 		password: "123456xy",
+	// 		level: 1
+	// 	})
+	// 	test.save(function(err) {
+	// 		if (err) {
+	// 			console.log(err);
+	// 
+	// 		} else {
+	// 			console.log("Successfully created an employee.");
+	// 
+	// 		}
+	// 	})
+
 	res.render('../views/login');
 })
 
 
 // 用户登录
 app.post('/login', function(req, res) {
-	if (req.body.username == 'yangxu2019' && req.body.password == '123456xy') {
-		req.session.userName = req.body.username; // 登录成功，设置 session
-		res.json({
-			ret_code: 1,
-			ret_msg: '登录成功'
-		}); // 若登录失败，重定向到登录页面
-		//res.redirect('/');
-	} else {
-		res.json({
-			ret_code: 0,
-			ret_msg: '账号或密码错误'
-		}); // 若登录失败，重定向到登录页面
-	}
+	User.find({
+		username: req.body.username
+	}).exec(function(err, user) {
+		if (err) {
+			console.log("Error:", err);
+		} else {
+
+			if (user.length == 0) {
+				res.json({
+					ret_code: 0,
+					ret_msg: '无此账号，请联系管理员添加'
+				}); // 若登录失败，重定向到登录页面
+			} else if (user[0].password == req.body.password) {
+
+				req.session.userName = user[0].username; // 登录成功，设置 session
+				res.json({
+					ret_code: 1,
+					ret_msg: '登录成功'
+				}); // 若登录失败，重定向到登录页面
+				//res.redirect('/');
+			} else {
+				res.json({
+					ret_code: 0,
+					ret_msg: '账号或密码错误'
+				}); // 若登录失败，重定向到登录页面
+			}
+		}
+	});
+
 });
 
 
@@ -134,7 +165,7 @@ app.get('/', (req, res, next) => {
 
 app.use('/main', mainrouter);
 app.use('/fst', fstrouter);
-//app.use('/users', usersRouter);
+app.use('/order', orderRouter);
 //app.use('/employees', employees);
 //app.use('/aliobj', aliobjrouter);
 
