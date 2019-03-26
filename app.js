@@ -10,13 +10,13 @@ var employees = require('./routes/employees');
 
 var mainrouter = require('./routes/main');
 var fstrouter = require('./routes/fst');
-var killpro = require('../lib/killprocess');
+
 var app = express();
 
 //connect to MongoDb
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-<<<<<<< HEAD
+
 
 // killpro("ps -aux|grep 'mongod'|gawk '{  print $11 }'|grep 'mongod'", function(msg) {
 // 	if (msg == "") {
@@ -25,15 +25,8 @@ mongoose.Promise = global.Promise;
 // 		})
 // 	}
 // })
-=======
-killpro("ps -aux|grep 'mongod'|gawk '{  print $11 }'|grep 'mongod'", function(msg) {
-	if (msg == "") {
-		killpro("mongod --dbpath=/root/data/db --port 27017 --fork --logpath=/root/data/db/mongo.log", function(msg) {
-			console.log(msg)
-		})
-	}
-})
->>>>>>> 8f8fb63f2aa3b4e55ef30fae398712efc8c170a8
+
+
 
 
 

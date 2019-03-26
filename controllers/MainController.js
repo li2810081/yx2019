@@ -197,14 +197,16 @@ mainController.update = function(req, res) {
 };
 
 mainController.delete = function(req, res) {
+	var _data = req.body.dt;
+	//res.json(_data);
 	Product.remove({
-		_id: req.params.id
+		p_id: _data[0].p_id
 	}, function(err) {
 		if (err) {
 			console.log(err);
 		} else {
-			console.log("Employee deleted!");
-			res.redirect("/employees");
+			console.log(_data[0].title+" deleted!");
+			res.json({msg:_data[0].title+" 已删除"});
 		}
 	});
 };
@@ -234,16 +236,16 @@ mainController.model_exportToExcel = function(req, res) {
 			}
 		});
 	}
-// 	_data.map(async function(sgdata, index) {
-// 		var res = await tanslate(sgdata.title)
-// 			.then((res) => {
-// 				console.log(index + "  before : " + sgdata.title)
-// 				console.log(index + "  res : " + res)
-// 				sgdata.title = res;
-// 				console.log(index + "  after : " + sgdata.title)
-// 				if (index + 1 == _data.length) {}
-// 			})
-// 	})
+	// 	_data.map(async function(sgdata, index) {
+	// 		var res = await tanslate(sgdata.title)
+	// 			.then((res) => {
+	// 				console.log(index + "  before : " + sgdata.title)
+	// 				console.log(index + "  res : " + res)
+	// 				sgdata.title = res;
+	// 				console.log(index + "  after : " + sgdata.title)
+	// 				if (index + 1 == _data.length) {}
+	// 			})
+	// 	})
 	load(_data);
 
 	function reExcel(_data, req) {

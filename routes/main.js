@@ -24,7 +24,7 @@ router.post('/create', main.create);
 //router.post('/update/:id', main.update);
 
 // // // Edit update
-//router.post('/delete/:id', main.delete);
+router.post('/delete', main.delete);
 
 
 module.exports = router;

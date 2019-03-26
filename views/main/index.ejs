@@ -37,11 +37,10 @@
 
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-container">
-    <a  class="layui-btn layui-btn-sm" target="_blank" href="/add">打开添加页面</a>
-    <!-- <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>    -->
 	<button class="layui-btn layui-btn-sm" lay-event="DelData">删除选中行数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="exportToExcel">(带图片)导出选中行数据到Excel</button>
+    <button class="layui-btn layui-btn-sm" lay-event="toOder">生成到订单</button>
     <button class="layui-btn layui-btn-sm" lay-event="model_exportToExcel">导出报价英文表</button>
+	
   </div>
 </script>
  <script type="text/html" id="picTpl">
@@ -65,8 +64,10 @@
 <script src="/js/Singleexport2excel.js"></script>
 <script>
 
-layui.use('table', function () {
-	var table = layui.table;
+layui.use(['table','element'], function () {
+	
+	var table = layui.table
+	,element=layui.element;
 
 	table.render({
 		elem: '#test',
@@ -134,7 +135,7 @@ layui.use('table', function () {
 		if (obj.event === 'showDetail') {
 			layer.open({
 				type: 2,
-				content: '/show/'+tooldata.p_id
+				content: 'https://detail.1688.com/offer/'+tooldata.p_id+'.html#J_DetailInside'
 				,area: ['800px', '600px']
 			});
 		}
@@ -145,9 +146,22 @@ layui.use('table', function () {
 		switch (obj.event) {
 		case 'DelData':
 			var data = checkStatus.data;
-			layer.confirm('真的删除所选' + data.length + '行么', function (index) {
+			layer.confirm('真的删除所选' + data[0].title + '信息么', function (index) {
 				console.log(data)
-				
+				 $.ajax({
+				 	url: "/main/delete",
+				 	type: 'post',
+				 	data: {dt:data},
+				 	dataType: "json",
+				 	success: function (dt) {				         						
+				 		layer.close(index);
+						console.log(dt.msg);
+						 $('.demoTable .layui-btn').click();
+				 		
+				 	}
+				 });		
+				 
+				 
 				layer.close(index);
 			});
 			break;
@@ -166,7 +180,7 @@ layui.use('table', function () {
                             						
 		  					layer.close(index);
 							if(dt.success){
-							  layer.msg(dt.msg+"    开始下载。。。");
+							  layer.msg(dt.msg+"开始下载。。。");
 							  window.open('/excel/'+mark+'.xlsx');
 							}else{
 							  layer.msg(dt.msg);
@@ -177,25 +191,8 @@ layui.use('table', function () {
 			var data = checkStatus.data;
 			layer.msg('选中了：' + data.length + ' 个');
 			break;
-		case 'exportToExcel':
-			var colarr = [];
-			var fieldarr = [];
-			for (let v of obj.config.cols[0]) {
-				if (v.type != "checkbox" && !v.hide) {
-					colarr.push(v.title);
-					fieldarr.push(v.field);
-				}
-			}
-			//LAY_CHECKED
-			var dataExp = [];
-			for (let vd of checkStatus.data) {
-				var dataExpS = {};
-				for (let vdsingle of fieldarr) {
-					dataExpS['"' + vdsingle + '"'] = vd[vdsingle];
-				}
-				dataExp.push(dataExpS);
-			}
-			export2Excel(colarr, dataExp, '导出表');
+		case 'toOrder':
+			
 			break;
 		};
 	});
