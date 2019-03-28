@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var employee = require("../controllers/EmployeeController.js");
+var employee = require("../controllers/orderController.js");
 
 // Get all employees
 router.get('/', employee.list);
@@ -19,10 +19,10 @@ router.post('/save', employee.save);
 router.get('/edit/:id', employee.edit);
 
 // Edit update
-router.post('/update/:id', employee.update);
+//router.post('/update/:id', employee.update);
 
 // Edit update
-router.post('/delete/:id', employee.delete);
+//router.post('/delete/:id', employee.delete);
 
 
 module.exports = router;

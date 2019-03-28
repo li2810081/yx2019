@@ -1,81 +1,81 @@
 var mongoose = require("mongoose");
-var Employee = require("../models/Employee");
+var Order = require("../models/Order");
 
-var employeeController = {};
+var orderController = {};
 
 // Show List View
-employeeController.list = function(req, res) {
-    Employee.find({}).exec(function (err, employees) {
+orderController.list = function(req, res) {
+    Order.find({}).exec(function (err, orders) {
       if (err) {
         console.log("Error:", err);
       }
       else {
-        res.render("../views/employees/index", {employees: employees});
+        res.render("../views/orders/index", {orders: orders});
       }
     });
 };
 
-employeeController.show = function(req, res) {
-    Employee.findOne({_id: req.params.id}).exec(function (err, employee) {
+orderController.show = function(req, res) {
+    Order.findOne({_id: req.params.id}).exec(function (err, order) {
       if (err) {
         console.log("Error:", err);
       }
       else {
-        res.render("../views/employees/show", {employee: employee});
+        res.render("../views/orders/show", {order: order});
       }
     });
 };
 
-employeeController.create = function(req, res) {
-    res.render("../views/employees/create");
+orderController.create = function(req, res) {
+    res.render("../views/orders/create");
 };
 
   //Save Post
-employeeController.save = function(req, res) {
-    var employee = new Employee(req.body);
+orderController.save = function(req, res) {
+    var order = new Order(req.body);
   
-    employee.save(function(err) {
+    order.save(function(err) {
       if(err) {
         console.log(err);
-        res.render("../views/employees/create");
+        res.render("../views/orders/create");
       } else {
-        console.log("Successfully created an employee.");
-        res.redirect("/employees/show/"+employee._id);
+        console.log("Successfully created an order.");
+        res.redirect("/orders/show/"+order._id);
       }
     });
 };
 
-employeeController.edit = function(req, res) {
-    Employee.findOne({_id: req.params.id}).exec(function (err, employee) {
+orderController.edit = function(req, res) {
+    Order.findOne({_id: req.params.id}).exec(function (err, order) {
       if (err) {
         console.log("Error:", err);
       }
       else {
-        res.render("../views/employees/edit", {employee: employee});
+        res.render("../views/orders/edit", {order: order});
       }
     });
 };
 
-employeeController.update = function(req, res) {
-    Employee.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name, address: req.body.address, position: req.body.position, salary: req.body.salary }}, { new: true }, function (err, employee) {
+orderController.update = function(req, res) {
+    Order.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name, address: req.body.address, position: req.body.position, salary: req.body.salary }}, { new: true }, function (err, order) {
       if (err) {
         console.log(err);
-        res.render("../views/employees/edit", {employee: req.body});
+        res.render("../views/orders/edit", {order: req.body});
       }
-      res.redirect("/employees/show/"+employee._id);
+      res.redirect("/orders/show/"+order._id);
     });
 };
 
-employeeController.delete = function(req, res) {
-    Employee.remove({_id: req.params.id}, function(err) {
+orderController.delete = function(req, res) {
+    Order.remove({_id: req.params.id}, function(err) {
       if(err) {
         console.log(err);
       }
       else {
-        console.log("Employee deleted!");
-        res.redirect("/employees");
+        console.log("Order deleted!");
+        res.redirect("/orders");
       }
     });
 };
 
-module.exports = employeeController;
+module.exports = orderController;

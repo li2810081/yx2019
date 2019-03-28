@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 
-var EmployeeSchema = new mongoose.Schema({
-    name: String,
-    address: String,
+var OrderSchema = new mongoose.Schema({
+    : String,
+    o_id: String,
     position: String,
     salary: Number,
     updated_at: { type: Date, default: Date.now },
   });
   
-module.exports = mongoose.model('Employee', EmployeeSchema);  
+module.exports = mongoose.model('Order', OrderSchema);  
