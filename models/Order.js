@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
 var OrderSchema = new mongoose.Schema({
-    : String,
     o_id: String,
     position: String,
     salary: Number,

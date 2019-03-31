@@ -17,20 +17,7 @@ var app = express();
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
-// killpro("ps -aux|grep 'mongod'|gawk '{  print $11 }'|grep 'mongod'", function(msg) {
-// 	if (msg == "") {
-// 		killpro("mongod --dbpath=/root/data/db --port 27017 --fork --logpath=/root/data/db/mongo.log", function(msg) {
-// 			console.log(msg)
-// 		})
-// 	}
-// })
-
-
-
-
-
-mongoose.connect('mongodb://192.168.2.4:27017/wwwdb', {
+mongoose.connect('mongodb://127.0.0.1:27017/wwwdb', {
 		useNewUrlParser: true,
 		dbName: "wwwdb",
 		keepAlive: true,
@@ -76,20 +63,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.get('/login', function(req, res) {
-	// 	var test = new User({
-	// 		username: "yangxu2019",
-	// 		password: "123456xy",
-	// 		level: 1
-	// 	})
-	// 	test.save(function(err) {
-	// 		if (err) {
-	// 			console.log(err);
-	// 
-	// 		} else {
-	// 			console.log("Successfully created an employee.");
-	// 
-	// 		}
-	// 	})
+// 		var test = new User({
+// 			username: "yangxu2019",
+// 			password: "123456xy",
+// 			level: 1
+// 		})
+// 		test.save(function(err) {
+// 			if (err) {
+// 				console.log(err);
+// 	
+// 			} else {
+// 				console.log("Successfully created an employee.");
+// 	
+// 			}
+// 		})
 
 	res.render('../views/login');
 })
